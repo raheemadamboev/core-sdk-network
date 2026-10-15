@@ -1,20 +1,23 @@
 [versions]
-agp = "9.4.1"
-coreKtx = "1.19.1"
-junit = "4.13.2"
-junitVersion = "1.3.0"
-espressoCore = "3.7.0"
-appcompat = "1.8.0"
-material = "1.14.0"
+
+serialization = "1.11.0"
+timber = "5.0.1"
+gravity-core = "1.0.48"
+
+android = "9.4.1"
+kotlin = "2.4.21"
+
+sdk-min = "26"
+sdk-compile = "37"
+sdk-target = "37"
 
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+gravity-core = { group = "com.github.raheemadamboev", name = "core-sdk-android", version.ref = "gravity-core" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
 
+library = { id = "com.android.library", version.ref = "android" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
