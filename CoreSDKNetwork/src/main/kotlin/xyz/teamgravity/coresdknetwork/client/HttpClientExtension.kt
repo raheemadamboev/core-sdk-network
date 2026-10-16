@@ -3,6 +3,7 @@ package xyz.teamgravity.coresdknetwork.client
 import io.ktor.client.HttpClient
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -23,9 +24,17 @@ import kotlinx.serialization.SerializationException
 import timber.log.Timber
 import xyz.teamgravity.coresdkandroid.result.GeneralError
 import xyz.teamgravity.coresdkandroid.result.Result
+import java.net.ConnectException
+import java.net.NoRouteToHostException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.channels.UnresolvedAddressException
+
+/**
+ * Text that the cause of a ConnectException contains when the server refused the connection, for example
+ * "ECONNREFUSED (Connection refused)". Any other failure to connect means the device has no working connection.
+ */
+private const val CONNECTION_REFUSED = "refused"
 
 /**
  * Sends a GET request to [route] and returns the response body, or the GeneralError that describes the failure.
@@ -192,9 +201,15 @@ private fun HttpStatusCode.toGeneralError(): GeneralError {
 
 private fun Exception.toGeneralError(): GeneralError {
     return when (this) {
-        is UnknownHostException, is UnresolvedAddressException -> GeneralError.Internet
-        is HttpRequestTimeoutException, is SocketTimeoutException -> GeneralError.Timeout
+        is HttpRequestTimeoutException, is ConnectTimeoutException, is SocketTimeoutException -> GeneralError.Timeout
+        is UnknownHostException, is UnresolvedAddressException, is NoRouteToHostException -> GeneralError.Internet
+        is ConnectException -> if (isConnectionRefused()) GeneralError.Server else GeneralError.Internet
         is ContentConvertException, is NoTransformationFoundException, is SerializationException -> GeneralError.Serialization
         else -> GeneralError.Unknown
     }
+}
+
+private fun Throwable.isConnectionRefused(): Boolean {
+    return generateSequence(this) { throwable -> throwable.cause }
+        .any { throwable -> throwable.message?.contains(CONNECTION_REFUSED, ignoreCase = true) == true }
 }
