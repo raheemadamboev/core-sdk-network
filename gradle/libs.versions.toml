@@ -1,11 +1,10 @@
 [versions]
 
-serialization = "1.11.0"
+ktor = "3.6.0"
 timber = "5.0.1"
 gravity-core = "1.0.48"
 
 android = "9.4.1"
-kotlin = "2.4.21"
 
 sdk-min = "26"
 sdk-compile = "37"
@@ -13,11 +12,13 @@ sdk-target = "37"
 
 [libraries]
 
-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 gravity-core = { group = "com.github.raheemadamboev", name = "core-sdk-android", version.ref = "gravity-core" }
 
 [plugins]
 
 library = { id = "com.android.library", version.ref = "android" }
-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

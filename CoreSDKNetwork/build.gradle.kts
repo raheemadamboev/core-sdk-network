@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.library)
-    alias(libs.plugins.serialization)
     id("maven-publish")
 }
 
@@ -13,7 +12,7 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.sdk.min.get().toInt()
-        consumerProguardFiles.add(file("proguard-rules.pro"))
+        consumerProguardFiles.add(file("consumer-rules.keep"))
     }
 
     lint {
@@ -34,14 +33,17 @@ android {
 }
 
 dependencies {
-    // serialization
-    implementation(libs.serialization)
+    // ktor
+    api(libs.ktor)
+    implementation(libs.ktor.negotiation)
+    api(libs.ktor.json)
+    api(libs.ktor.logging)
 
     // timber
     implementation(libs.timber)
 
     // gravity core
-    implementation(libs.gravity.core)
+    api(libs.gravity.core)
 }
 
 publishing {
