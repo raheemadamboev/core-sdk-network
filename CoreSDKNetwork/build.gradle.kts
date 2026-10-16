@@ -35,6 +35,7 @@ android {
 dependencies {
     // ktor
     api(libs.ktor)
+    implementation(libs.ktor.okhttp)
     implementation(libs.ktor.negotiation)
     api(libs.ktor.json)
     api(libs.ktor.logging)
@@ -51,7 +52,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.raheemadamboev"
             artifactId = "core-sdk-network"
-            version = "1.0.1"
+            version = "1.0.2"
 
             afterEvaluate {
                 from(components["release"])

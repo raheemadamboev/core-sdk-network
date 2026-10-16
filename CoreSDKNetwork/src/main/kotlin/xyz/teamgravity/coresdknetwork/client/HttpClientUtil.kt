@@ -3,6 +3,7 @@ package xyz.teamgravity.coresdknetwork.client
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -25,8 +26,6 @@ object HttpClientUtil {
      * Creates HttpClient that serializes with [json], logs to Timber and resolves every request path against [baseUrl].
      * Non-2xx responses are not thrown, so the safe call helpers in HttpClientExtension can map them to GeneralError.
      *
-     * @param engine
-     * Engine that executes the requests. Pass a MockEngine in tests.
      * @param baseUrl
      * Base url of the server. It must end with a slash, and request paths must not start with one, for example
      * "https://api.example.com/v1/" and "notes".
@@ -35,15 +34,18 @@ object HttpClientUtil {
      * @param logLevel
      * How much of each request and response is logged, usually LogLevel.ALL in debug builds and LogLevel.NONE in release
      * builds. The Authorization header is never logged.
+     * @param engine
+     * Engine that executes the requests. OkHttp by default.
+     * Pass a MockEngine in tests.
      * @param configuration
      * Extra configuration applied after the defaults, for example the Auth plugin. Do not set expectSuccess to true here,
      * otherwise non-2xx responses are thrown instead of being mapped to GeneralError.
      */
     fun create(
-        engine: HttpClientEngine,
         baseUrl: String,
         json: Json,
         logLevel: LogLevel,
+        engine: HttpClientEngine = OkHttp.create(),
         configuration: HttpClientConfig<*>.() -> Unit = {}
     ): HttpClient {
         return HttpClient(engine) {
