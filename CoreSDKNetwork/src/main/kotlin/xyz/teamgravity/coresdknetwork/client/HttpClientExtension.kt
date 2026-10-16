@@ -45,14 +45,14 @@ private const val CONNECTION_REFUSED = "refused"
  * @param parameters
  * Query parameters. A null value is skipped.
  */
-suspend inline fun <reified Response : Any> HttpClient.get(
+suspend inline fun <reified Response : Any> HttpClient.safelyGet(
     route: String,
     parameters: Map<String, Any?> = emptyMap()
 ): Result<Response, GeneralError> {
-    return safeCall(
+    return safelyCall(
         typeInfo = typeInfo<Response>(),
         execute = {
-            return@safeCall get {
+            return@safelyCall get {
                 url(route)
                 parameters.forEach { (key, value) ->
                     parameter(key, value)
@@ -71,14 +71,14 @@ suspend inline fun <reified Response : Any> HttpClient.get(
  * @param body
  * Request body, serialized as JSON.
  */
-suspend inline fun <reified Request, reified Response : Any> HttpClient.post(
+suspend inline fun <reified Request, reified Response : Any> HttpClient.safelyPost(
     route: String,
     body: Request
 ): Result<Response, GeneralError> {
-    return safeCall(
+    return safelyCall(
         typeInfo = typeInfo<Response>(),
         execute = {
-            return@safeCall post {
+            return@safelyCall post {
                 url(route)
                 setBody(body)
             }
@@ -95,14 +95,14 @@ suspend inline fun <reified Request, reified Response : Any> HttpClient.post(
  * @param body
  * Request body, serialized as JSON.
  */
-suspend inline fun <reified Request, reified Response : Any> HttpClient.put(
+suspend inline fun <reified Request, reified Response : Any> HttpClient.safelyPut(
     route: String,
     body: Request
 ): Result<Response, GeneralError> {
-    return safeCall(
+    return safelyCall(
         typeInfo = typeInfo<Response>(),
         execute = {
-            return@safeCall put {
+            return@safelyCall put {
                 url(route)
                 setBody(body)
             }
@@ -119,14 +119,14 @@ suspend inline fun <reified Request, reified Response : Any> HttpClient.put(
  * @param body
  * Request body, serialized as JSON.
  */
-suspend inline fun <reified Request, reified Response : Any> HttpClient.patch(
+suspend inline fun <reified Request, reified Response : Any> HttpClient.safelyPatch(
     route: String,
     body: Request
 ): Result<Response, GeneralError> {
-    return safeCall(
+    return safelyCall(
         typeInfo = typeInfo<Response>(),
         execute = {
-            return@safeCall patch {
+            return@safelyCall patch {
                 url(route)
                 setBody(body)
             }
@@ -143,14 +143,14 @@ suspend inline fun <reified Request, reified Response : Any> HttpClient.patch(
  * @param parameters
  * Query parameters. A null value is skipped.
  */
-suspend inline fun <reified Response : Any> HttpClient.delete(
+suspend inline fun <reified Response : Any> HttpClient.safelyDelete(
     route: String,
     parameters: Map<String, Any?> = emptyMap()
 ): Result<Response, GeneralError> {
-    return safeCall(
+    return safelyCall(
         typeInfo = typeInfo<Response>(),
         execute = {
-            return@safeCall delete {
+            return@safelyCall delete {
                 url(route)
                 parameters.forEach { (key, value) ->
                     parameter(key, value)
@@ -170,7 +170,7 @@ suspend inline fun <reified Response : Any> HttpClient.delete(
  * Sends the request.
  */
 @PublishedApi
-internal suspend fun <Response> safeCall(
+internal suspend fun <Response> safelyCall(
     typeInfo: TypeInfo,
     execute: suspend () -> HttpResponse
 ): Result<Response, GeneralError> {
