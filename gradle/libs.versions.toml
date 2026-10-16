@@ -1,5 +1,6 @@
 [versions]
 
+kotlin = "2.4.21"
 ktor = "3.6.0"
 timber = "5.0.1"
 gravity-core = "1.0.48"
@@ -12,6 +13,7 @@ sdk-target = "37"
 
 [libraries]
 
+kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
